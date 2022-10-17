@@ -4,6 +4,7 @@ import com.example.moviepj.csv.ResponseMessage;
 import com.example.moviepj.service.MovieService;
 import com.example.moviepj.service.criteria.MovieSearchCriteria;
 import com.example.moviepj.service.dto.MovieDto;
+import com.example.moviepj.service.dto.UserDto;
 import com.example.moviepj.service.model.QueryResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -70,6 +71,9 @@ public class MovieController {
 
     @GetMapping("main-page")
     public String mainPageOfWebsite(Model model){
+        UserDto userDto = new UserDto();
+        userDto.setEmail("");
+        model.addAttribute("user", userDto);
         return "index";
     }
 }

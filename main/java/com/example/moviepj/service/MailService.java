@@ -17,8 +17,11 @@ public class MailService {
     private JavaMailSender mailSender;
     @Value("${verify.link}")
     private String verifyLink;
+    @Value("${verify.subscription}")
+    private String verifySubscription;
     @Value("${spring.mail.username}")
     private String sender;
+
     @Async
     public void sendVerificationEmail(UserDto user)
             throws MessagingException, UnsupportedEncodingException, InterruptedException {
@@ -33,5 +36,17 @@ public class MailService {
         mailMessage.setSubject("CONFIRMATION");
         mailSender.send(mailMessage);
 
+    }
+
+    @Async
+    public void sendSubscriptionEmail(String email) {
+        SimpleMailMessage mailMessage
+                = new SimpleMailMessage();
+
+        mailMessage.setFrom(sender);
+        mailMessage.setTo(email);
+        mailMessage.setText("Please confirm your subscription by clicking this link \n" + verifySubscription + email);
+        mailMessage.setSubject("SUBSCRIPTION");
+        mailSender.send(mailMessage);
     }
 }

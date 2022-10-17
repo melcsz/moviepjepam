@@ -2,6 +2,7 @@ package com.example.moviepj.persistance.entity;
 
 
 import com.example.moviepj.persistance.entity.status.FileStatus;
+import com.example.moviepj.persistance.entity.status.SubscriptionStatus;
 import com.example.moviepj.persistance.entity.status.UserStatus;
 
 import javax.persistence.*;
@@ -37,6 +38,17 @@ public class UserEntity {
 
     @Enumerated(EnumType.STRING)
     private UserStatus status;
+
+    @Enumerated(EnumType.STRING)
+    private SubscriptionStatus subscriptionStatus;
+
+    public SubscriptionStatus getSubscriptionStatus() {
+        return subscriptionStatus;
+    }
+
+    public void setSubscriptionStatus(SubscriptionStatus subscriptionStatus) {
+        this.subscriptionStatus = subscriptionStatus;
+    }
 
     public UserStatus getStatus() {
         return status;
@@ -85,6 +97,7 @@ public class UserEntity {
     public UserEntity() {
         super();
         this.setStatus(UserStatus.NOT_ACTIVATED);
+
     }
 
     public UserEntity(Long id) {

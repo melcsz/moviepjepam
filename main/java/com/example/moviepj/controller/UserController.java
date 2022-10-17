@@ -93,24 +93,18 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
-    @GetMapping("register-page")
+    @GetMapping("/register-page")
     public String mainPage(Model model){
         UserDto user = new UserDto();
         model.addAttribute("user",user);
         return "register";
     }
 
-    @GetMapping("login-page")
+    @GetMapping("/login-page")
     public String mainPage(){
         return "login";
     }
 
-    @GetMapping("verify-email")
-    @ResponseBody
-    public String verifyEmail(@RequestParam("email") String email) throws IOException {
-        UserEntity user = userService.getByEmail(email);
-        userService.verifyEmail(user);
-        return "Verified";
-    }
+
 
 }

@@ -5,6 +5,7 @@ import com.example.moviepj.exception.CSVImportException;
 import com.example.moviepj.exception.PasswordsDoNotMatch;
 import com.example.moviepj.exception.RoleNotFound;
 import com.example.moviepj.persistance.entity.*;
+import com.example.moviepj.persistance.entity.status.SubscriptionStatus;
 import com.example.moviepj.persistance.entity.status.UserStatus;
 import com.example.moviepj.persistance.repository.RoleRepository;
 import com.example.moviepj.persistance.repository.UserRepository;
@@ -154,5 +155,10 @@ public class UserService {
     @Transactional
     public void verifyEmail(UserEntity user) {
         user.setStatus(UserStatus.ACTIVATED);
+    }
+
+    @Transactional
+    public void verifySubscription(UserEntity user) {
+        user.setSubscriptionStatus(SubscriptionStatus.SUBSCRIBED);
     }
 }
