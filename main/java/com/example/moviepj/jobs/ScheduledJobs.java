@@ -23,24 +23,18 @@ public class ScheduledJobs {
         this.fileService = fileService;
     }
 
-     //@Scheduled(cron = "0 */30 * * * *")
      //@Scheduled(fixedDelay = 30000)
     public void downloadMovieImages() {
         System.out.printf(">>>>Download Image Job has been started %s%n", new Date());
         fileService.download();
         System.out.printf(">>>>>Download Image Job has been finished %s%n", new Date());
     }
-    //@Scheduled(cron = "0 */30 * * * *")
+    //@Scheduled(fixedDelay = 30000)
     public void checkCrashedCases(){
         System.out.printf(">>>>Checking Crashed Job has started %s%n", new Date());
         fileService.checkCrashedCases();
         System.out.printf(">>>>>Checking Crashed Job has ended %s%n", new Date());
     }
 
-    @Bean
-    public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
-        ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
-        threadPoolTaskScheduler.setPoolSize(10);
-        return threadPoolTaskScheduler;
-    }
+
 }

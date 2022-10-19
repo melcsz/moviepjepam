@@ -35,7 +35,7 @@ public class FileController {
     }
 
     @RequestMapping("/picture/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MODERATOR','ROLE_USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @ResponseBody
     public HttpEntity<byte[]> getArticleImage(@PathVariable Long id) throws IOException {
 

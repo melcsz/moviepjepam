@@ -1,5 +1,7 @@
 package com.example.moviepj.persistance.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Optional;
 
@@ -18,10 +20,12 @@ public class ReviewEntity {
     private Integer score;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "movie_id", referencedColumnName = "id")
     private MovieEntity movie;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private UserEntity user;
 

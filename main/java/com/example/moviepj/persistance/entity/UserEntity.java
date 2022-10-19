@@ -4,6 +4,8 @@ package com.example.moviepj.persistance.entity;
 import com.example.moviepj.persistance.entity.status.FileStatus;
 import com.example.moviepj.persistance.entity.status.SubscriptionStatus;
 import com.example.moviepj.persistance.entity.status.UserStatus;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -58,7 +60,7 @@ public class UserEntity {
         this.status = status;
     }
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(	name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -69,6 +71,7 @@ public class UserEntity {
         setPassword(encode);
     }
 
+    @Transactional(propagation=Propagation.REQUIRED, readOnly=true, noRollbackFor=Exception.class)
     public Set<RoleEntity> getRoles() {
         return roles;
     }

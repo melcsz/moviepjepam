@@ -31,6 +31,7 @@ public class UserController {
         this.userService = userService;
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @PostMapping("/import-csv")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
         String message = "";
@@ -85,7 +86,7 @@ public class UserController {
 
         if (dto.getPassword() == null) {
             throw new Exception("Password is required");
-        } else if(!(dto.getPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{12,}$"))){
+        } else if(!(dto.getPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$"))){
             throw new Exception("Password is weak");
         }
 
@@ -104,7 +105,6 @@ public class UserController {
     public String mainPage(){
         return "login";
     }
-
 
 
 }

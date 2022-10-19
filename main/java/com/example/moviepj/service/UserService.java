@@ -1,9 +1,7 @@
 package com.example.moviepj.service;
 
 import com.example.moviepj.csv.Parser;
-import com.example.moviepj.exception.CSVImportException;
-import com.example.moviepj.exception.PasswordsDoNotMatch;
-import com.example.moviepj.exception.RoleNotFound;
+import com.example.moviepj.exception.*;
 import com.example.moviepj.persistance.entity.*;
 import com.example.moviepj.persistance.entity.status.SubscriptionStatus;
 import com.example.moviepj.persistance.entity.status.UserStatus;
@@ -83,7 +81,7 @@ public class UserService {
     public String registerUser(UserDto signUpRequest) throws Exception {
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            throw new Exception("user already exists with this email");
+            throw new EmailAlreadyInUseException();
         }
 
         UserEntity user = new UserEntity(signUpRequest.getEmail(),
@@ -115,11 +113,14 @@ public class UserService {
             });
         }
         user.setRoles(roles);
+        user.setFirstName(signUpRequest.getFirstName());
+        user.setLastName(signUpRequest.getLastName());
         user.setStatus(UserStatus.NOT_ACTIVATED);
         mailService.sendVerificationEmail(signUpRequest);
         userRepository.save(user);
         return ("Email sent");
     }
+
 
 
     public void deleteUser(Long id) {

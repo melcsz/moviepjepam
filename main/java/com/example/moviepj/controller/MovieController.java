@@ -7,18 +7,16 @@ import com.example.moviepj.service.dto.MovieDto;
 import com.example.moviepj.service.dto.UserDto;
 import com.example.moviepj.service.model.QueryResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
 
@@ -34,6 +32,7 @@ public class MovieController {
     }
 
 
+    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     @PostMapping("/import-csv")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
         String message;
@@ -54,7 +53,7 @@ public class MovieController {
     }
 
     @GetMapping
-//    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MODERATOR','ROLE_USER')")
+    //@PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MODERATOR','ROLE_USER')")
     public String getMoviesPaginated(MovieSearchCriteria criteria, Model model) {
         QueryResponseWrapper<MovieDto> wrapper = moveService.getMovies(criteria);
         model.addAttribute("movies", wrapper);

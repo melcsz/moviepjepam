@@ -5,9 +5,11 @@ import com.example.moviepj.payload.request.ReviewRequest;
 import com.example.moviepj.persistance.entity.MovieEntity;
 import com.example.moviepj.persistance.entity.ReviewEntity;
 import com.example.moviepj.persistance.entity.UserEntity;
+import com.example.moviepj.persistance.entity.status.SubscriptionStatus;
 import com.example.moviepj.persistance.repository.MovieRepository;
 import com.example.moviepj.persistance.repository.RatingRepository;
 import com.example.moviepj.persistance.repository.UserRepository;
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -60,8 +62,9 @@ public class RatingService {
         }
     }
 
-    public ResponseEntity<?> addReview(ReviewRequest review) {
-        if(!ratingRepository.existsById(review.getMovieId())){
+
+    public ResponseEntity<?> addReview(ReviewRequest review) throws Exception {
+        if(!movieRepository.existsById(review.getMovieId())){
             return ResponseEntity.badRequest().body(("no movie found"));
         }else{
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -72,6 +75,7 @@ public class RatingService {
                  username = principal.toString();
             }
             UserEntity user = userRepository.getByEmail(username);
+            if(user.getSubscriptionStatus() != SubscriptionStatus.SUBSCRIBED) return ResponseEntity.badRequest().body("cannot leave review if you are not subscribed");
             MovieEntity movie = movieRepository.getById(review.getMovieId());
             ReviewEntity reviewEntity = new ReviewEntity(review.getTitle(), review.getScore(), movie, user);
             try {
@@ -81,6 +85,10 @@ public class RatingService {
                 return ResponseEntity.badRequest().body(("sad"));
             }
         }
+    }
+
+    public List<ReviewEntity> getReviews() {
+        return ratingRepository.findAll();
     }
 }
 

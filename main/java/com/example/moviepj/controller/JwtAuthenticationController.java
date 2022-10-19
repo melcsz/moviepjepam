@@ -8,10 +8,8 @@ import com.example.moviepj.security.JwtResponse;
 import com.example.moviepj.security.JwtTokUtil;
 import com.example.moviepj.security.JwtUserDetailService;
 import com.example.moviepj.service.UserService;
-import com.sun.media.jfxmedia.logging.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,19 +34,22 @@ public class JwtAuthenticationController {
     }
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody @ModelAttribute("user") JwtRequest authenticationRequest) throws Exception {
+    @ResponseBody
+    public String createAuthenticationToken(@ModelAttribute("user") JwtRequest authenticationRequest) throws Exception {
+        try {
+            if (userService.getByEmail(authenticationRequest.getUsername()).getStatus().equals(UserStatus.NOT_ACTIVATED)) {
+                throw new DisabledException("account not activated");
+            }
+            authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
-        if(userService.getByEmail(authenticationRequest.getUsername()).getStatus().equals(UserStatus.NOT_ACTIVATED)){
-            throw new DisabledException("account not activated");
+            final UserDetails userDetails = userDetailsService
+                    .loadUserByUsername(authenticationRequest.getUsername());
+
+            return jwtTokUtil.generateToken(userDetails);
+        }catch (Exception e){
+            throw new EmailOrPasswordDoNotMatch();
         }
-        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
-        final UserDetails userDetails = userDetailsService
-                .loadUserByUsername(authenticationRequest.getUsername());
-
-        final String token = jwtTokUtil.generateToken(userDetails);
-
-        return ResponseEntity.ok(new JwtResponse(token));
     }
 
     private void authenticate(String username, String password) throws Exception {

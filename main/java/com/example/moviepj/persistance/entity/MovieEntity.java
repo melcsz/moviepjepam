@@ -22,7 +22,7 @@ public class MovieEntity {
     private Long id;
 
     @NotBlank(message = "title is mandatory")
-    @Column(name = "title",length = 191)
+    @Column(name = "title",length = 300)
     private String title;
 
     @Column(name = "critic_rating")
