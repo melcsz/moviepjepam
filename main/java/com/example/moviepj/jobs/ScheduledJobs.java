@@ -23,14 +23,15 @@ public class ScheduledJobs {
         this.fileService = fileService;
     }
 
-     //@Scheduled(fixedDelay = 30000)
+    //@Scheduled(fixedDelay = 30000)
     public void downloadMovieImages() {
         System.out.printf(">>>>Download Image Job has been started %s%n", new Date());
         fileService.download();
         System.out.printf(">>>>>Download Image Job has been finished %s%n", new Date());
     }
+
     //@Scheduled(fixedDelay = 30000)
-    public void checkCrashedCases(){
+    public void checkCrashedCases() {
         System.out.printf(">>>>Checking Crashed Job has started %s%n", new Date());
         fileService.checkCrashedCases();
         System.out.printf(">>>>>Checking Crashed Job has ended %s%n", new Date());

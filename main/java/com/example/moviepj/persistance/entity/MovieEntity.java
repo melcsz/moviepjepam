@@ -12,7 +12,6 @@ import java.util.List;
 @Entity
 @Table(name = "movie", schema = "movie_copy",
         indexes = {
-                @Index(name = "IDX_MYTIT", columnList = "title"),
                 @Index(columnList = "director_id",name = "release_year")
         })
 public class MovieEntity {
